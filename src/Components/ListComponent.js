@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import {contactList} from '../mockData';
 
 const Container = styled.div`
     display: flex;
@@ -21,13 +22,14 @@ const ProfileImg = styled.img`
 const SearchBox = styled.div`
     background: #f6f6f6;
     padding: 10px;
+    display: flex;
 `;
-const SearchContainer = styled.div`
+export const SearchContainer = styled.div`
     display: flex;
     flex-direction: row;
     background: white;
     border-radius: 16px;
-    /* width: 100%; */
+    width: 100%;
     padding: 5px 10px;
 `;
 
@@ -35,21 +37,25 @@ const SearchIcon = styled.img`
     height: 28px;
     width: 28px;
 `;
-const SearchInput = styled.input`
+export const SearchInput = styled.input`
     width: 100%;
     outline: none;
     border: none;
     font-size: 15px;
+    margin-left: 10px;
 `;
 
 const ContactItem = styled.div `
     display: flex;
     flex-direction: row;
-    width: 100%;
+    /* width: 100%; */
     border-bottom: 1px solid #f2f2f2;
     background: white;
     cursor: pointer;
     padding: 15px 12px;
+    :hover {
+        background: #ebebeb;
+    }
 `;
 
 const ProfileIcon = styled(ProfileImg) `
@@ -77,35 +83,33 @@ const LatestMessage = styled.span `
     margin-top: 3px;
 `;
 
-const ContactComponent = () => {
+const MessageTime = styled.span `
+    font-size: 12px;
+    margin-right: 10px;
+    color: rgba(0,0,0,0.45);
+    white-space: nowrap;
+`;
+
+const ContactComponent = (props) => {
+    const {
+        id,
+        name,
+        profilePic,
+        lastText,
+        lastTextTime} = props.details;
     return (
-        <>
-            <ContactItem>
-                <ProfileIcon src='/Profile/Akhil.jpeg'/> 
-                <ContactInfo>
-                    <ContactName>Akhil Ch </ContactName>
-                    <LatestMessage>Mowa</LatestMessage>
-                </ContactInfo>
-            </ContactItem>
-            <ContactItem>
-                <ProfileIcon src='/Profile/Avinash.jpeg'/> 
-                <ContactInfo>
-                    <ContactName>Avinash K </ContactName>
-                    <LatestMessage>Bro</LatestMessage>
-                </ContactInfo>
-            </ContactItem>
-            <ContactItem>
-                <ProfileIcon src='/Profile/Srikanth.jpeg'/> 
-                <ContactInfo>
-                    <ContactName>Srikanth</ContactName>
-                    <LatestMessage>Areyy Bro</LatestMessage>
-                </ContactInfo>
-            </ContactItem>
-        </>
+        <ContactItem onClick = {() => props.setChatSelected(props.details)}>
+            <ProfileIcon src={profilePic}/> 
+            <ContactInfo>
+                <ContactName>{name}</ContactName>
+                <LatestMessage>{lastText}</LatestMessage>
+            </ContactInfo>
+            <MessageTime>{lastTextTime}</MessageTime>
+        </ContactItem>
     )
 }
 
-const ListComponent = () => {
+const ListComponent = (props) => {
     return(
         <Container>
             <Profile>
@@ -117,7 +121,10 @@ const ListComponent = () => {
                     <SearchInput placeholder = "Search or start a new chat" />
                 </SearchContainer>
             </SearchBox>
-            <ContactComponent />
+            {contactList.map (
+                (contact) => (
+                <ContactComponent details = {contact} setChatSelected = {props.setChatSelected}/>)
+            )}
         </Container>
     )
 }
